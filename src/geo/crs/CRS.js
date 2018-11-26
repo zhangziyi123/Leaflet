@@ -59,8 +59,9 @@ export var CRS = {
 	// Returns the scale used when transforming projected coordinates into
 	// pixel coordinates for a particular zoom. For example, it returns
 	// `256 * 2^zoom` for Mercator-based CRS.
+	// ????
 	scale: function (zoom) {
-		return 256 * Math.pow(2, zoom);
+		return 256 * Math.pow(2, zoom); // pow 幂运算
 	},
 
 	// @method zoom(scale: Number): Number

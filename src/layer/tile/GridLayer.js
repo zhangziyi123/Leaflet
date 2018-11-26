@@ -901,7 +901,7 @@ export var GridLayer = Layer.extend({
 		return newCoords;
 	},
 
-	// 作用？ bounds 值除以 titleSize作用？
+	// 作用？ bounds 值除以 titleSize作用？计算瓦片行列号范围
 	_pxBoundsToTileRange: function (bounds) {
 		var tileSize = this.getTileSize();
 		return new Bounds(
