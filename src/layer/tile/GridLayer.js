@@ -605,7 +605,7 @@ export var GridLayer = Layer.extend({
 
 		var bounds = this._map.getPixelWorldBounds(this._tileZoom);
 		if (bounds) {
-			this._globalTileRange = this._pxBoundsToTileRange(bounds);
+			this._globalTileRange = this._pxBoundsToTileRange(bounds); // 像素边界转瓦片范围,计算瓦片行列号范围
 		}
 
 		this._wrapX = crs.wrapLng && !this.options.noWrap && [
@@ -642,7 +642,8 @@ export var GridLayer = Layer.extend({
 
 		if (center === undefined) { center = map.getCenter(); }
 		if (this._tileZoom === undefined) { return; }	// if out of minzoom/maxzoom
-
+		// 由中心坐标计算当前的像素边界，然后再计算出当前视图的行列号范围，再进行对image标签src地址的计算
+		// 但是参数不应该还需要传入地图容器的div来计算容器的像素宽高吗？
 		var pixelBounds = this._getTiledPixelBounds(center),
 		    tileRange = this._pxBoundsToTileRange(pixelBounds),
 		    tileCenter = tileRange.getCenter(),
@@ -900,6 +901,7 @@ export var GridLayer = Layer.extend({
 		return newCoords;
 	},
 
+	// 作用？ bounds 值除以 titleSize作用？
 	_pxBoundsToTileRange: function (bounds) {
 		var tileSize = this.getTileSize();
 		return new Bounds(

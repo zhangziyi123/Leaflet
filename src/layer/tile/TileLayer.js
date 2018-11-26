@@ -81,12 +81,13 @@ export var TileLayer = GridLayer.extend({
 	},
 
 	initialize: function (url, options) {
-
+        debugger;
 		this._url = url;
 
 		options = Util.setOptions(this, options);
 
 		// detecting retina displays, adjusting tileSize and zoom levels
+		/// ?????????
 		if (options.detectRetina && Browser.retina && options.maxZoom > 0) {
 
 			options.tileSize = Math.floor(options.tileSize / 2);

@@ -73,6 +73,7 @@ export var CRS = {
 	// @method getProjectedBounds(zoom: Number): Bounds
 	// Returns the projection's bounds scaled and transformed for the provided `zoom`.
 	getProjectedBounds: function (zoom) {
+		debugger;
 		if (this.infinite) { return null; }
 
 		var b = this.projection.bounds,

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../dist/leaflet.css">
+    <script src="../dist/leaflet-src.js"></script>
+    <style>
+        * { margin: 0;padding: 0px;}
+    </style>
+</head>
+<body style="width: 100%;height: 100%;position:absolute;">
+ <div id="mapview" style="width: 100%;height: 100%;"></div>
+</body>
+</html>
+
+<script>
+    window.onload = function () {
+        L.CRS.EPSG4490 = L.extend({}, L.CRS.Earth, {
+            code: 'EPSG:4490',
+            projection: L.Projection.LonLat,
+            //transformation: new L.Transformation(1 / 360, 0.5, -1 / 360, 90 / 360)
+            transformation: new L.Transformation(1 / 360, 0.5, -1 / 360, 0.25) // 仿射变换设置参数
+        });
+
+        L.extend(L.LatLng, {
+            DEG_TO_RAD: Math.PI / 180,
+            RAD_TO_DEG: 180 / Math.PI,
+            MAX_MARGIN: 1.0E-9 // max margin of error for the "equals" check
+        });
+        var map = L.map('mapview', {
+            crs: L.CRS.EPSG4490
+        }).setView([30.254309, 120.212995], 13);
+
+        L.tileLayer('http://t{s}.tianditu.cn/DataServer?T=vec_c&X={x}&Y={y}&L={z}', {
+            subdomains: [0, 1, 2, 3, 4, 5, 6, 7],
+            minZoom: 0,
+            maxZoom: 20
+        }).addTo(map);
+
+        L.marker([30.254309, 120.212995]).addTo(map)
+            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+            .openPopup();
+    }
+</script>
