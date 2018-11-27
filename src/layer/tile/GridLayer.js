@@ -630,7 +630,11 @@ export var GridLayer = Layer.extend({
 		    scale = map.getZoomScale(mapZoom, this._tileZoom),
 		    pixelCenter = map.project(center, this._tileZoom).floor(),
 		    halfSize = map.getSize().divideBy(scale * 2);
-
+		    // scale的含义和作用？ 调试时发现不同级别下scale的值都是1
+		    // pixelCenter 是什么对象？作用？像素中心，是将坐标中心转为平面中心
+		    // 再有平面中心获取平面范围？？试图平面范围？？map.getSize()
+		    // halfsize因该就是半个视图范围的长度，是一个point对象
+		    // map.project返回一个Point对象，subtract/add都是其方法 一个是减去传入的点的x,y,一个是加，
 		return new Bounds(pixelCenter.subtract(halfSize), pixelCenter.add(halfSize));
 	},
 
@@ -643,7 +647,6 @@ export var GridLayer = Layer.extend({
 		if (center === undefined) { center = map.getCenter(); }
 		if (this._tileZoom === undefined) { return; }	// if out of minzoom/maxzoom
 		// 由中心坐标计算当前的像素边界，然后再计算出当前视图的行列号范围，再进行对image标签src地址的计算
-		// 但是参数不应该还需要传入地图容器的div来计算容器的像素宽高吗？
 		var pixelBounds = this._getTiledPixelBounds(center),
 		    tileRange = this._pxBoundsToTileRange(pixelBounds),
 		    tileCenter = tileRange.getCenter(),
@@ -902,8 +905,11 @@ export var GridLayer = Layer.extend({
 	},
 
 	// 作用？ bounds 值除以 titleSize作用？计算瓦片行列号范围
+	// 将平面范围转为瓦片行列号范围，unscaleBy方法return new Point(this.x / point.x, this.y / point.y);
+	// 这里this.x和this.y的值的含义？视图范围的x,y就是参数bounds
+	// min的值要向下取整即保留整数；max的值要向上取整，但是取整后为什么还要减去1？因为瓦片序号从0，0开始，那怎么解释min的不用减？？？
 	_pxBoundsToTileRange: function (bounds) {
-		var tileSize = this.getTileSize();
+		var tileSize = this.getTileSize(); // {x: 256, y: 256}
 		return new Bounds(
 			bounds.min.unscaleBy(tileSize).floor(),
 			bounds.max.unscaleBy(tileSize).ceil().subtract([1, 1]));
